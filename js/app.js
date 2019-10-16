@@ -1,6 +1,7 @@
 'use strict';
 
 const allHorns = [];
+const allKeywords = [];
 
 function Horn(title, image_url, description, keyword, horns) {
   this.title = title;
@@ -20,16 +21,26 @@ Horn.prototype.render = function(){
   $('main').append($newSection);
 };
 
+//ref: https://medium.com/dailyjs/how-to-remove-array-duplicates-in-es6-5daa8789641c
 function optionRender() {
+  const uniqueSet = new Set(allKeywords);
+  const tempArr = [...uniqueSet];
+  tempArr.forEach(keyObj => {
+    const key = $('<option></option>');
+    key.text(keyObj);
+    key.attr('value', keyObj);
+    $('select').append(key);
+  });
 
+  $('select').on('change', clickHandler);
 }
 
 function fetchdata(){
   $.get('data/page-1.json', data => {
     data.forEach(horn => {
       new Horn(horn.title, horn.image_url, horn.description, horn.keyword, horn.horns).render();
+      allKeywords.push(horn.keyword);
       if( data.length === allHorns.length){
-        $('select').on('change', clickHandler);
         optionRender();
       }
     });
