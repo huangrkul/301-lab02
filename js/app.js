@@ -2,6 +2,8 @@
 
 const allHorns1 = [];
 const allHorns2 = [];
+let isPage1 = true;
+
 
 function Horn(horn, page) {
   this.title = horn.title;
@@ -24,13 +26,21 @@ Horn.prototype.render = function(){
 
 function optionRender(page) {
   const uniqueKeywords = [];
+<<<<<<< HEAD
+=======
+  // console.log(uniqueKeywords);
+>>>>>>> f70b0bb7a682df9f8c43007d09573f1b7b40a700
   let hornPage;
   console.log(uniqueKeywords);
   $('select').prop('selectedIndex',0);
   $('option').not(':first-child').remove();
   if(page === 1) {
     hornPage = allHorns1;
+<<<<<<< HEAD
   } else {
+=======
+  }else{
+>>>>>>> f70b0bb7a682df9f8c43007d09573f1b7b40a700
     hornPage = allHorns2;
   }
 
@@ -38,13 +48,12 @@ function optionRender(page) {
     if(!uniqueKeywords.includes(image.keyword)){
       uniqueKeywords.push(image.keyword);
     }
-  })
+  });
   console.log(uniqueKeywords);
   uniqueKeywords.forEach(keyObj => {
     let optionTag = `<option value=${keyObj}>${keyObj}</option>`;
     $('select').append(optionTag);
   });
-
   $('select').on('change', clickHandler);
 }
 
@@ -59,19 +68,52 @@ function fetchData(event){
     dataURL = 'data/page-1.json';
     pageRend = 1;
     allHorns = allHorns1;
+    isPage1 = true;
   } else {
     dataURL = 'data/page-2.json';
     pageRend = 2;
     allHorns = allHorns2;
+    isPage1 = false;
   }
   $.get(dataURL, data => {
     data.forEach(horn => {
       let hornObj = new Horn(horn, pageRend).render();
       $('main').append(hornObj);
-      if( data.length === allHorns.length){
-        optionRender(pageRend);
-      }
+      optionRender(pageRend);
     });
+  });
+}
+function sortArr(event){
+  $('main').empty();
+  event.preventDefault();
+  let allHorns;
+  if(isPage1){
+    allHorns = allHorns1;
+  }else{
+    allHorns = allHorns2;
+  }
+  let sort = event.target.id;
+  if(sort === 'sortTitle'){
+    allHorns.sort((a,b) =>{
+      let title1 = a.title;
+      let title2 = b.title;
+      if(title1 < title2) {return -1;}
+      if (title1 > title2) {return 1;}
+      return 0;
+    });
+  }
+  if (sort === 'sortHorn') {
+    allHorns.sort((a,b) =>{
+      let horn1 = a.horns;
+      let horn2 = b.horns;
+      if (horn1 < horn2) {return -1;}
+      if (horn1 > horn2) {return 1;}
+      return 0;
+    });
+  }
+  allHorns.forEach(obj =>{
+    let hornObj = obj.render();
+    $('main').append(hornObj);
   });
 }
 
@@ -87,5 +129,7 @@ function clickHandler(event){
 $(function() {
   $('#page1').on('click', fetchData).trigger('click');
   $('#page2').on('click', fetchData);
+  $('#sortTitle').on('click', sortArr);
+  $('#sortHorn').on('click', sortArr);
 });
 
