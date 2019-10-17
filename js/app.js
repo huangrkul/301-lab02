@@ -24,15 +24,16 @@ Horn.prototype.render = function(){
 
 function optionRender(page) {
   const uniqueKeywords = [];
-  console.log(uniqueKeywords);
   let hornPage;
+  console.log(uniqueKeywords);
   $('select').prop('selectedIndex',0);
   $('option').not(':first-child').remove();
   if(page === 1) {
-    hornPage = allHorns1
+    hornPage = allHorns1;
   } else {
-    hornPage = allHorns2
+    hornPage = allHorns2;
   }
+
   hornPage.forEach(image => {
     if(!uniqueKeywords.includes(image.keyword)){
       uniqueKeywords.push(image.keyword);
