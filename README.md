@@ -41,8 +41,12 @@ Actual time needed to complete: 20 min
 # 301-lab03
 
 ### Pair programming first half:
+- navigator: Paul Bennett
+- driver: Will Huang
 
 ### Pair programming second half:
+- navigator: Will Huang
+- driver: Paul Bennett
 
 
 ## Feature 1: Pagination

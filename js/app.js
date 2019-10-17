@@ -39,16 +39,30 @@ function optionRender(page) {
   $('select').on('change', clickHandler);
 }
 
-function fetchdata(){
-  $.get('data/page-1.json', data => {
-    data.forEach(horn => {
-      let hornObj = new Horn(horn, 1).render();
-      $('main').append(hornObj);
-      if( data.length === allHorns1.length){
-        optionRender();
-      }
+function fetchData(event){
+  event.preventDefault();
+  const pageSwap = event.target.id;
+  if(pageSwap === 'page1') {
+    $.get('data/page-1.json', data => {
+      data.forEach(horn => {
+        let hornObj = new Horn(horn, 1).render();
+        $('main').append(hornObj);
+        if( data.length === allHorns1.length){
+          optionRender(1);
+        }
+      });
     });
-  });
+  } else {
+    $.get('data/page-2.json', data => {
+      data.forEach(horn => {
+        let hornObj = new Horn(horn, 2).render();
+        $('main').append(hornObj);
+        if( data.length === allHorns2.length){
+          optionRender(2);
+        }
+      });
+    });
+  }
 }
 
 function clickHandler(event){
@@ -61,6 +75,7 @@ function clickHandler(event){
 }
 
 $(function() {
-  fetchdata();
+  $('#page1').on('click', fetchData);
+  $('#page2').on('click', fetchData);
 });
 
