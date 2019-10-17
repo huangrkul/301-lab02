@@ -1,30 +1,32 @@
 'use strict';
 
-const allHorns = [];
+const allHorns1 = [];
+const allHorns2 = [];
 
-function Horn(horn) {
+function Horn(horn, page) {
   this.title = horn.title;
   this.image_url = horn.image_url;
   this.description = horn.description;
   this.horns = horn.horns;
   this.keyword = horn.keyword;
-  allHorns.push(this);
+  if(page === 1) {
+    allHorns1.push(this);
+  } else {
+    allHorns2.push(this);
+  }
 }
 
 Horn.prototype.render = function(){
-  const myTemplate = $('#photo-template').html();
-  const $newSection = $('<section></section>');
-  $newSection.html(myTemplate);
-  $newSection.find('h2').text(this.title);
-  $newSection.find('p').text(this.description);
-  $newSection.find('img').attr('src', this.image_url);
-  $newSection.attr('class', this.keyword);
-  $('main').append($newSection);
+  let source = $('#horn-template').html();
+  let template = Handlebars.compile(source);
+  return template(this);
 };
 
-function optionRender() {
+function optionRender(page) {
   const uniqueKeywords = [];
-  allHorns.forEach(image => {
+  let hornPage;
+  if(page === 1) {hornPage = allHorns1} else {hornPage = allHorns2}
+  hornPage.forEach(image => {
     if(!uniqueKeywords.includes(image.keyword)){
       uniqueKeywords.push(image.keyword);
     }
@@ -37,21 +39,35 @@ function optionRender() {
   $('select').on('change', clickHandler);
 }
 
-function fetchdata(){
-  $.get('data/page-1.json', data => {
-    data.forEach(horn => {
-      new Horn(horn).render();
-      if( data.length === allHorns.length){
-        optionRender();
-      }
+function fetchData(event){
+  event.preventDefault();
+  const pageSwap = event.target.id;
+  if(pageSwap === 'page1') {
+    $.get('data/page-1.json', data => {
+      data.forEach(horn => {
+        let hornObj = new Horn(horn, 1).render();
+        $('main').append(hornObj);
+        if( data.length === allHorns1.length){
+          optionRender(1);
+        }
+      });
     });
-  });
+  } else {
+    $.get('data/page-2.json', data => {
+      data.forEach(horn => {
+        let hornObj = new Horn(horn, 2).render();
+        $('main').append(hornObj);
+        if( data.length === allHorns2.length){
+          optionRender(2);
+        }
+      });
+    });
+  }
 }
 
 function clickHandler(event){
   event.preventDefault();
   let keyValue = event.target.value;
-  //ref https://stackoverflow.com/questions/178407/select-all-child-elements-except-the-first
   if(keyValue !== 'default'){
     $('section').hide();
     $(`section.${keyValue}`).fadeIn(500);
@@ -59,6 +75,7 @@ function clickHandler(event){
 }
 
 $(function() {
-  fetchdata();
+  $('#page1').on('click', fetchData);
+  $('#page2').on('click', fetchData);
 });
 
