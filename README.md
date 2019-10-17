@@ -53,38 +53,38 @@ Actual time needed to complete: 20 min
 
 Estimate of time needed to complete: 1 hour
 
-Start time: 
+Start time: 9:00am
 
-Finish time:
+Finish time: 11:00am
 
-Actual time needed to complete:
+Actual time needed to complete:  2 hours
 
 ## Feature 2: Templating
 
 Estimate of time needed to complete: 1 hour
 
-Start time: 
+Start time: 8:45am
 
-Finish time:
+Finish time: 9:00am
 
-Actual time needed to complete:
+Actual time needed to complete: 15 min
 
 ## Feature 3: Styling with Flexbox
 
 Estimate of time needed to complete: 1 hour
 
-Start time: 
+Start time: incomplete
 
-Finish time:
+Finish time: incomplete
 
-Actual time needed to complete:
+Actual time needed to complete: incomplete
 
 ## Feature 4: Sort the images
 
 Estimate of time needed to complete: 1 hour
 
-Start time: 
+Start time: 11:00am
 
-Finish time:
+Finish time: 1:00pm
 
-Actual time needed to complete:
+Actual time needed to complete: 2 hours
