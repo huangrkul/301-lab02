@@ -31,7 +31,6 @@ function optionRender() {
     key.attr('value', keyObj);
     $('select').append(key);
   });
-
   $('select').on('change', clickHandler);
 }
 
@@ -51,7 +50,7 @@ function clickHandler(event){
   event.preventDefault();
   let keyValue = event.target.value;
   // ref https://stackoverflow.com/questions/178407/select-all-child-elements-except-the-first
-  $('section:not(:first-child)').remove();
+  $('section:not(:first-child)').fadeOut();
   allHorns.forEach(isolate => {
     if(isolate.keyword === keyValue) {
       isolate.render();
