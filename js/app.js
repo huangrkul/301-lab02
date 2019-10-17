@@ -26,21 +26,14 @@ Horn.prototype.render = function(){
 
 function optionRender(page) {
   const uniqueKeywords = [];
-<<<<<<< HEAD
-=======
   // console.log(uniqueKeywords);
->>>>>>> f70b0bb7a682df9f8c43007d09573f1b7b40a700
   let hornPage;
   console.log(uniqueKeywords);
   $('select').prop('selectedIndex',0);
   $('option').not(':first-child').remove();
   if(page === 1) {
     hornPage = allHorns1;
-<<<<<<< HEAD
-  } else {
-=======
   }else{
->>>>>>> f70b0bb7a682df9f8c43007d09573f1b7b40a700
     hornPage = allHorns2;
   }
 
