@@ -55,17 +55,14 @@ function fetchData(event){
   const pageSwap = event.target.id;
   let dataURL;
   let pageRend;
-  let allHorns;
   $('main').empty();
   if(pageSwap === 'page1') {
     dataURL = 'data/page-1.json';
     pageRend = 1;
-    allHorns = allHorns1;
     isPage1 = true;
   } else {
     dataURL = 'data/page-2.json';
     pageRend = 2;
-    allHorns = allHorns2;
     isPage1 = false;
   }
   $.get(dataURL, data => {
