@@ -25,12 +25,19 @@ Horn.prototype.render = function(){
 function optionRender(page) {
   const uniqueKeywords = [];
   let hornPage;
-  if(page === 1) {hornPage = allHorns1} else {hornPage = allHorns2}
+  $('select').prop('selectedIndex',0);
+  $('option').not(':first-child').remove();
+  if(page === 1) {
+    hornPage = allHorns1
+  } else {
+    hornPage = allHorns2
+  }
   hornPage.forEach(image => {
     if(!uniqueKeywords.includes(image.keyword)){
       uniqueKeywords.push(image.keyword);
     }
   })
+  console.log(uniqueKeywords);
   uniqueKeywords.forEach(keyObj => {
     let optionTag = `<option value=${keyObj}>${keyObj}</option>`;
     $('select').append(optionTag);
@@ -42,27 +49,28 @@ function optionRender(page) {
 function fetchData(event){
   event.preventDefault();
   const pageSwap = event.target.id;
+  let dataURL;
+  let pageRend;
+  let allHorns;
+  $('main').empty();
   if(pageSwap === 'page1') {
-    $.get('data/page-1.json', data => {
-      data.forEach(horn => {
-        let hornObj = new Horn(horn, 1).render();
-        $('main').append(hornObj);
-        if( data.length === allHorns1.length){
-          optionRender(1);
-        }
-      });
-    });
+    dataURL = 'data/page-1.json';
+    pageRend = 1;
+    allHorns = allHorns1;
   } else {
-    $.get('data/page-2.json', data => {
-      data.forEach(horn => {
-        let hornObj = new Horn(horn, 2).render();
-        $('main').append(hornObj);
-        if( data.length === allHorns2.length){
-          optionRender(2);
-        }
-      });
-    });
+    dataURL = 'data/page-2.json';
+    pageRend = 2;
+    allHorns = allHorns2;
   }
+  $.get(dataURL, data => {
+    data.forEach(horn => {
+      let hornObj = new Horn(horn, pageRend).render();
+      $('main').append(hornObj);
+      if( data.length === allHorns.length){
+        optionRender(pageRend);
+      }
+    });
+  });
 }
 
 function clickHandler(event){
@@ -75,7 +83,7 @@ function clickHandler(event){
 }
 
 $(function() {
-  $('#page1').on('click', fetchData);
+  $('#page1').on('click', fetchData).trigger('click');
   $('#page2').on('click', fetchData);
 });
 
