@@ -1,16 +1,16 @@
 'use strict';
 
 const allHorns = [];
-const allKeywords = [];
 
-function Horn(title, image_url, description, keyword, horns) {
-  this.title = title;
-  this.image_url = image_url;
-  this.description = description;
-  this.horns = horns;
-  this.keyword = keyword;
+function Horn(horn) {
+  this.title = horn.title;
+  this.image_url = horn.image_url;
+  this.description = horn.description;
+  this.horns = horn.horns;
+  this.keyword = horn.keyword;
   allHorns.push(this);
 }
+
 Horn.prototype.render = function(){
   const myTemplate = $('#photo-template').html();
   const $newSection = $('<section></section>');
@@ -18,18 +18,20 @@ Horn.prototype.render = function(){
   $newSection.find('h2').text(this.title);
   $newSection.find('p').text(this.description);
   $newSection.find('img').attr('src', this.image_url);
+  $newSection.attr('class', this.keyword);
   $('main').append($newSection);
 };
 
-//ref: https://medium.com/dailyjs/how-to-remove-array-duplicates-in-es6-5daa8789641c
 function optionRender() {
-  const uniqueSet = new Set(allKeywords);
-  const tempArr = [...uniqueSet];
-  tempArr.forEach(keyObj => {
-    const key = $('<option></option>');
-    key.text(keyObj);
-    key.attr('value', keyObj);
-    $('select').append(key);
+  const uniqueKeywords = [];
+  allHorns.forEach(image => {
+    if(!uniqueKeywords.includes(image.keyword)){
+      uniqueKeywords.push(image.keyword);
+    }
+  })
+  uniqueKeywords.forEach(keyObj => {
+    let optionTag = `<option value=${keyObj}>${keyObj}</option>`;
+    $('select').append(optionTag);
   });
 
   $('select').on('change', clickHandler);
@@ -38,8 +40,7 @@ function optionRender() {
 function fetchdata(){
   $.get('data/page-1.json', data => {
     data.forEach(horn => {
-      new Horn(horn.title, horn.image_url, horn.description, horn.keyword, horn.horns).render();
-      allKeywords.push(horn.keyword);
+      new Horn(horn).render();
       if( data.length === allHorns.length){
         optionRender();
       }
@@ -50,16 +51,14 @@ function fetchdata(){
 function clickHandler(event){
   event.preventDefault();
   let keyValue = event.target.value;
-  // ref https://stackoverflow.com/questions/178407/select-all-child-elements-except-the-first
-  $('section:not(:first-child)').remove();
-  allHorns.forEach(isolate => {
-    if(isolate.keyword === keyValue) {
-      isolate.render();
-    }
-  });
+  //ref https://stackoverflow.com/questions/178407/select-all-child-elements-except-the-first
+  if(keyValue !== 'default'){
+    $('section').hide();
+    $(`section.${keyValue}`).fadeIn(500);
+  }
 }
+
 $(function() {
   fetchdata();
-
 });
 
