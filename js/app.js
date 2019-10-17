@@ -24,6 +24,7 @@ Horn.prototype.render = function(){
 
 function optionRender(page) {
   const uniqueKeywords = [];
+  console.log(uniqueKeywords);
   let hornPage;
   $('select').prop('selectedIndex',0);
   $('option').not(':first-child').remove();
