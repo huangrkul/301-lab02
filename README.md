@@ -37,3 +37,54 @@ Start time: 11:30am
 Finish time: 11:50am
 
 Actual time needed to complete: 20 min
+
+# 301-lab03
+
+### Pair programming first half:
+- navigator: Paul Bennett
+- driver: Will Huang
+
+### Pair programming second half:
+- navigator: Will Huang
+- driver: Paul Bennett
+
+
+## Feature 1: Pagination
+
+Estimate of time needed to complete: 1 hour
+
+Start time: 
+
+Finish time:
+
+Actual time needed to complete:
+
+## Feature 2: Templating
+
+Estimate of time needed to complete: 1 hour
+
+Start time: 
+
+Finish time:
+
+Actual time needed to complete:
+
+## Feature 3: Styling with Flexbox
+
+Estimate of time needed to complete: 1 hour
+
+Start time: 
+
+Finish time:
+
+Actual time needed to complete:
+
+## Feature 4: Sort the images
+
+Estimate of time needed to complete: 1 hour
+
+Start time: 
+
+Finish time:
+
+Actual time needed to complete:

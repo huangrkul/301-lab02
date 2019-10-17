@@ -1,46 +1,73 @@
 'use strict';
 
-const allHorns = [];
-const allKeywords = [];
+const allHorns1 = [];
+const allHorns2 = [];
 
-function Horn(title, image_url, description, keyword, horns) {
-  this.title = title;
-  this.image_url = image_url;
-  this.description = description;
-  this.horns = horns;
-  this.keyword = keyword;
-  allHorns.push(this);
+function Horn(horn, page) {
+  this.title = horn.title;
+  this.image_url = horn.image_url;
+  this.description = horn.description;
+  this.horns = horn.horns;
+  this.keyword = horn.keyword;
+  if(page === 1) {
+    allHorns1.push(this);
+  } else {
+    allHorns2.push(this);
+  }
 }
+
 Horn.prototype.render = function(){
-  const myTemplate = $('#photo-template').html();
-  const $newSection = $('<section></section>');
-  $newSection.html(myTemplate);
-  $newSection.find('h2').text(this.title);
-  $newSection.find('p').text(this.description);
-  $newSection.find('img').attr('src', this.image_url);
-  $('main').append($newSection);
+  let source = $('#horn-template').html();
+  let template = Handlebars.compile(source);
+  return template(this);
 };
 
-//ref: https://medium.com/dailyjs/how-to-remove-array-duplicates-in-es6-5daa8789641c
-function optionRender() {
-  const uniqueSet = new Set(allKeywords);
-  const tempArr = [...uniqueSet];
-  tempArr.forEach(keyObj => {
-    const key = $('<option></option>');
-    key.text(keyObj);
-    key.attr('value', keyObj);
-    $('select').append(key);
+function optionRender(page) {
+  const uniqueKeywords = [];
+  console.log(uniqueKeywords);
+  let hornPage;
+  $('select').prop('selectedIndex',0);
+  $('option').not(':first-child').remove();
+  if(page === 1) {
+    hornPage = allHorns1
+  } else {
+    hornPage = allHorns2
+  }
+  hornPage.forEach(image => {
+    if(!uniqueKeywords.includes(image.keyword)){
+      uniqueKeywords.push(image.keyword);
+    }
+  })
+  console.log(uniqueKeywords);
+  uniqueKeywords.forEach(keyObj => {
+    let optionTag = `<option value=${keyObj}>${keyObj}</option>`;
+    $('select').append(optionTag);
   });
   $('select').on('change', clickHandler);
 }
 
-function fetchdata(){
-  $.get('data/page-1.json', data => {
+function fetchData(event){
+  event.preventDefault();
+  const pageSwap = event.target.id;
+  let dataURL;
+  let pageRend;
+  let allHorns;
+  $('main').empty();
+  if(pageSwap === 'page1') {
+    dataURL = 'data/page-1.json';
+    pageRend = 1;
+    allHorns = allHorns1;
+  } else {
+    dataURL = 'data/page-2.json';
+    pageRend = 2;
+    allHorns = allHorns2;
+  }
+  $.get(dataURL, data => {
     data.forEach(horn => {
-      new Horn(horn.title, horn.image_url, horn.description, horn.keyword, horn.horns).render();
-      allKeywords.push(horn.keyword);
+      let hornObj = new Horn(horn, pageRend).render();
+      $('main').append(hornObj);
       if( data.length === allHorns.length){
-        optionRender();
+        optionRender(pageRend);
       }
     });
   });
@@ -49,16 +76,14 @@ function fetchdata(){
 function clickHandler(event){
   event.preventDefault();
   let keyValue = event.target.value;
-  // ref https://stackoverflow.com/questions/178407/select-all-child-elements-except-the-first
-  $('section:not(:first-child)').fadeOut();
-  allHorns.forEach(isolate => {
-    if(isolate.keyword === keyValue) {
-      isolate.render();
-    }
-  });
+  if(keyValue !== 'default'){
+    $('section').hide();
+    $(`section.${keyValue}`).fadeIn(500);
+  }
 }
-$(function() {
-  fetchdata();
 
+$(function() {
+  $('#page1').on('click', fetchData).trigger('click');
+  $('#page2').on('click', fetchData);
 });
 
